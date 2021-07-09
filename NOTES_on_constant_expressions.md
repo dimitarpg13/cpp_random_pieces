@@ -63,5 +63,27 @@ etc, must be a constant expression
   translation-unit-local entity that is usable in constant expressions. Such initialization is 
   disallowed in a module interface unit (outside its private-module-fragment, if any) or a module
   partition, and is deprecated in any other context. 
- 
 
+A ```constepxr``` function must satisfy the following requirements:
+* it must not be virtual (_until C++ 20_) 
+* it must not be a coroutine (_since C++ 20_)
+* its return type (if any) must be a literal type
+* each of its parameters must be a literal type
+* for constructor (and destructor _since C++ 20_), the class must have no virtual base classes
+* there exists at least one set of argument values such that an invocation of the function could be an
+evaluated subexpression of a core constant expression (for constructors, use in a constant initializer
+is sufficient (_since C++ 14_). No diagnostic is required for a violation of this bullet. 
+* its function body must not be a function-try-block (_until C++20__)  
+
+
+Function-try-block
+Establishes an exception handler around the body of a function
+
+Syntax
+The function-try-block is one of the alternative syntax forms for _function-body_, which is a part of
+function  defintion.
+
+try _ctor-initializer (optional)_ _compound-statement_ _handler-sequence_
+_ctor-initializer_ - member initializer list, only allowed in constructors
+_compound-statement_ - the brace-enclosed sequence of statements that constitues the body of a function
+_handler-sequence_ - sequence of one or more catch-clauses
