@@ -118,3 +118,132 @@ int main()
    ca[1] = 2; // Error: the type of ca[1] is int
 }
 ```
+
+
+```ref```-qualified member functions
+
+A non-```static``` member function can be declared with no ref-qualifier, with an lvalue
+ref-qualifier (the token & after the parameter list) or the rvalue ref-qualifier (the token &&
+after the parameter list). During overload resolution, non-static cv-qualified member function of 
+class X is treated as follows:
+
+* no ```ref```-qualifier: the implicit object parameter has type lvalue reference to cv-qualified X
+and is additionally allowed to bind rvalue implied object argument
+* lvalue ```ref```-qualifier: the implicit object parameter has type lvalue reference to 
+  ```cv```-qualified X
+* rvalue ref-qualifier: the implicit object parameter has type lvalue reference to cv-qualified X
+
+
+```cpp
+#include <iostream>
+
+struct S {
+    void f() &   { std::cout << "lvalue\n"; }
+    void f() &&  { std::cout << "rvalue\n"; }
+};
+
+int main() {
+    S s;
+    s.f();              // prints "lvalue"
+    std::move(s).f();   // prints "rvalue"
+    S().f();            // prints "rvalue"
+``` 
+
+_Note_: unlike ```cv```-qualification, ```ref```-qualification does not change the properties of
+the ```this``` pointer: within a rvalue ref-qualified function, ```*this``` remains an lvalue 
+expression. 
+
+
+Virtual and pure virtual functions
+
+A non-```static``` member function may be declared _virtual_ or _pure virtual_.
+
+
+Special member functions
+
+
+constructors and destructors are non-static member functions that use a special syntax for their
+declarations. Some member functions are _special_: under certain circumstances they are defined 
+by the compiler even if not defined by the user. They are:
+* default constructor
+* copy constructor
+* move constructor
+* copy assignment operator
+* destructor
+
+Special member functions along with comparison operators (_since C++ 20_) are the only functions
+that can be defaulted, that is, defined using ```= default``` instead of the function body.
+
+Example
+
+```cpp
+#include <iostream>
+#include <string>
+#include <utility>
+#include <exception>
+
+struct S {
+    int data;
+
+    // simple converting constructor (declaration)
+    S(int val);
+
+    // simple explicit constructor (declaration)
+    explicit S(std::string str);
+
+    // const member function (definition)
+    virtual int getData() const { return data; }
+}; 
+
+// definition of the constructor
+S::S(int val) : data(val) {
+    std::cout << "ctor1 called, data = " << data << '\n';
+}
+
+// this constructor has a catch clause
+S::S(std::string str) try : data(std::stoi(str)) {
+    std::cout << "ctor2 called, data = " << data << '\n';
+} catch(const std::exception&) {
+    std::cout << "ctor2 failed, string was '" << str << "'\n";
+    throw;  // ctor's catch clause should always rethrow
+}
+
+struct D : S {
+    int data2;
+    // constructor with a default argument
+    D(int v1, int v2 = 11) : S(v2), data2(v2) {}
+
+    // virtual member function
+    int getData() const override { return data*data2; }
+
+    // lvalue-only assignment operator
+    D& operator=(D other) & {
+        std::swap(other.data, data);
+        std::swap(other.data2, data2);
+        return *this;
+    }
+};
+
+int main() 
+{
+    D d1 = 1;
+    S s2("2");
+    try {
+
+    } catch (const std::exception&) {}
+    std::cout << s2.getData() << '\n';
+
+    D d2 (3,4);
+    d2 = d1;
+    // D(5) = d1; // ERROR: no suitable overload for operator=
+}
+```
+
+Output:
+
+```
+ctor1 called, data = 1
+ctor2 called, data = 2
+ctor2 failed, string was 'not a number'
+2
+ctor1 called, data = 3
