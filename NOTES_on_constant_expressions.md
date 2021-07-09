@@ -83,7 +83,10 @@ Syntax
 The function-try-block is one of the alternative syntax forms for _function-body_, which is a part of
 function  defintion.
 
-try _ctor-initializer (optional)_ _compound-statement_ _handler-sequence_
+**try** _ctor-initializer (optional)_ _compound-statement_ _handler-sequence_
+
 _ctor-initializer_ - member initializer list, only allowed in constructors
+
 _compound-statement_ - the brace-enclosed sequence of statements that constitues the body of a function
+
 _handler-sequence_ - sequence of one or more catch-clauses
