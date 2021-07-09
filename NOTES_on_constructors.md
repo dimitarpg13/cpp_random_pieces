@@ -19,9 +19,20 @@ declared at namespace scope or in a friend declaration, it must be a qualified c
 
 The only specifiers allowed in the _decl-specifier-seq_ of a constructor declaration are ```friend```,
 ```inline```, ```constexpr``` (_since C++ 11_), ```consteval``` (_since C++ 20_), and ```explicit```
-(in particular, no return type is allowed). Note that _cv-_ and _ref-qualifiers_ are    
+(in particular, no return type is allowed). Note that _cv-_ and _ref-qualifiers_ are not allowed either;
+```const``` and ```volatile``` semantics of an object do not kick in until the most-derived constructor
+completes.
+
+The body of function definition of any constructor, before the opening brace of the compound statement, 
+may include the _member initializer list_, whose syntax is the colon character ```:```, followed by
+the comma-separated list of one or more _member-initializers_ each of which has the following syntax
 
 
+_class-or-identifier_ **(** _expression-list_ **)** 
+
+initializes the base or member named by _class-or-identifier_ using direct initialization or, if
+_expression-list_ is empty, value-initialization.      
+# TODO: continue here!
 
 Non-static member functions
 
@@ -247,3 +258,49 @@ ctor2 called, data = 2
 ctor2 failed, string was 'not a number'
 2
 ctor1 called, data = 3
+```
+
+
+Direct initialization
+initializes an object from explicit set of constructor arguments
+
+
+Direct initialization Syntax:
+
+
+initialization with nonempty parenthesized list of expressions or braced-init-lists (_since C++11_):
+
+_T object_ **(** _arg_ **);**
+
+_T object_ **(** _arg1_, _arg2_, ... **);**
+
+
+initialization of an object of non-class type with a single brace-enclosed initializer (note: for class
+types and other uses of braced-init-list see the list-initialization section below):
+
+_T object_ **{** _arg_ **};**
+
+
+initialization of a _prvalue_ temporary (_until C++17_), the result object of a _prvalue_ (_since C++17_)
+by functional cast or with a parenthesized expression list
+
+_T_ **(** _other_ **)**
+
+_T_ **(** _arg1_, _arg2_, ... **)**
+
+
+initialization of a _prvalue_ temporary (_until C++17_), the result object of a prvalue (_since C++17_)
+by a ```static_cast``` expression
+
+**static_cast<** _T_ **>(** _other_ **)**
+
+
+
+
+
+List initialization
+# TODO: finish this
+
+Value initialization
+# TODO: finish this
+
