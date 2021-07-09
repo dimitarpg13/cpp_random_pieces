@@ -51,16 +51,14 @@ A ```constexpr``` variable must satisfy the following requirements:
 * it must be immediatelly initialized
 * the full-expression of its initialization, including all implicit conversions, constructor calls,
 etc, must be a constant expression
-(_since C++ 20_) 
-* it must have constant destruction i.e. either:
+* (_since C++ 20_) it must have constant destruction i.e. either:
    * it is not of class type nor (possibly multi-dimensional) array thereof, or
    * it is of class type or (possibly multi-dimenisional) array thereof, that class
      type has a constexpr destructor, and for a hypothetical expression ```e``` whose only effect
      is to destroy the object, ```e``` would be a core constant expression if the lifetime of the 
      object and its non-mutable subobjects (but not its mutable subobjects) were considered to 
      start within ```e```.
-(_since C++ 20_)
-* if a ```constexpr``` variable is not translation-unit-local, it should not be initialized to point
+* (_since C++ 20_) if a ```constexpr``` variable is not translation-unit-local, it should not be initialized to point
   to, or refer to, or have a (possibly recursive) subobject that points to or referes to, a 
   translation-unit-local entity that is usable in constant expressions. Such initialization is 
   disallowed in a module interface unit (outside its private-module-fragment, if any) or a module
