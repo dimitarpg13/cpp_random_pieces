@@ -1,4 +1,4 @@
-Constant expressions and constexpr sepcifier 
+Constant expressions and ```constexpr``` specifier 
 
 Defines an expression that can be evaluated at compile time.
 Such expressions can be used as non-type template arguments, array sizes, and in 
@@ -76,11 +76,14 @@ is sufficient (_since C++ 14_). No diagnostic is required for a violation of thi
 * its function body must not be a function-try-block (_until C++20__)  
 
 
-Function-try-block
+_Function-try-block_
+
 Establishes an exception handler around the body of a function
 
-Syntax
-The function-try-block is one of the alternative syntax forms for _function-body_, which is a part of
+
+_Function-try-block_ Syntax
+
+The _function-try-block_ is one of the alternative syntax forms for _function-body_, which is a part of
 function  defintion.
 
 **try** _ctor-initializer (optional)_ _compound-statement_ _handler-sequence_
@@ -90,3 +93,39 @@ _ctor-initializer_ - member initializer list, only allowed in constructors
 _compound-statement_ - the brace-enclosed sequence of statements that constitues the body of a function
 
 _handler-sequence_ - sequence of one or more catch-clauses
+
+A _function-try-block_ associates a sequence of catch clauses with the entire function body, and with
+the member initializer list (if used in a constructor) as well. Every exception thrown from any statement
+in the function body, or (for constructors) from any member or base constructor, or (for destructors) from
+any member or base destructor, transfer constrol to the _handler-sequence_ the same way an exception thrown
+in a regular try block would. 
+
+
+_Function-try-block_ example
+
+```cpp
+#include <string>
+struct S {
+    std::string m;
+    S(const std::string& str, int idx) try : m(str, idx) {
+
+    } catch (const std::exception& e) {
+
+       std::cout << "S(" << str << ", " << idx << ") failed: " << e.what() << '\n';
+    } // implicit "throw;" here
+};
+
+int main() {
+   S s1{"ABC", 1}; // does not throw (index is in bounds)
+   try {
+      S s2{"ABC", 4}; // throws (out of bounds)
+   } catch (std::exception& e) {
+      std::cout << "S s2... raised an exception: " << e.what() << '\n';
+   }
+}
+```
+Before any catch clauses of a function-try-block on a constructor are entered, a 
+fully-constructed members and bases have already been destroyed.
+
+
+(_since C++ 11_) if the _function-try-block_ is on a delegating constructor
