@@ -79,3 +79,42 @@ int main() {
 }
 ```
 
+
+```const```- and ```volatile```-qualified member functions
+
+
+A non-static member function can be declared with a ```const```, ```volatile```, or ```const volatile```
+qualifier (this qualifier appears after the parameter list in the function declaration). Differently
+```cv```-qualfied functions have different types and so may overload each other.
+
+
+In the body of ```cv```-qualified function, ```*this``` is ```cv```-qualified, e.g. in a ```const``` 
+member function, only other ```const``` member functions may be called normally. (A non-```const```
+member function may still be called if ```const_cast``` is applied or through an access path that
+does not involve ```this```).
+
+```cpp
+#include <vector>
+struct Array {
+    std::vector<int> data;
+    Array(int sz) : data(sz) {}
+    // const member function
+    int operator[](int idx) const {
+                            // this has type const Array*
+         return data[idx];  // transformed to (*this).data[idx];
+    }
+    // non-const member function
+    int& operator[](int idx) {
+                            // this has type Array*
+         return data[idx];  // transformed to (*this).data[idx];
+    }
+};
+
+int main()
+{
+   Array a(10);
+   a[1] = 1;  // OK: the type of a[1] is int&
+   const Array ca(10);
+   ca[1] = 2; // Error: the type of ca[1] is int
+}
+```
