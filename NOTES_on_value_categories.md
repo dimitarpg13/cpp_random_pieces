@@ -55,13 +55,29 @@ array lvalue (_since C++11_);
   of object type
 
 * ```p->m```, the built-in _member of pointer_ expression, except where ```m``` is a member enumerator or
-  a non-statuc member function;
+  a non-static member function;
 
 * ```a.*mp```, the _pointer to member of object_ expression, where ```a``` is an lvalue and ```mp``` is a 
   pointer to data member;
 
-* ```p->*mp```, the built-in pointer to member of pointer expression, where ```mp``` is a pointer to data
-  member; 
+* ```p->*mp```, the built-in _pointer to member of pointer_ expression, where ```mp``` is a pointer to data
+  member;
+
+* ```a, b```, the built-in _comma_ expression, where ```b``` is an lvalue;
+
+* ```a ? b : c```, the _ternary conditional_ expression for certain ```b``` and ```c``` (e.g. when both are
+  lvalues of the same type, but see definition for detail);
+
+* a _string literal_, such as ```"Hello World!"```;
+
+* a cast expression to lvalue reference type, such as ```static_cast<int&>(x)```;
+
+* (_since C++11_) a function call or an overloaded operator expression, whose return type is rvalue reference
+  to function;
+
+* (_since C++11_) a cast expression to rvalue reference to function type, such as 
+  ```static_cast<void (&&)(int)>(x)```. 
+ 
 
 Temporary materialization
 
