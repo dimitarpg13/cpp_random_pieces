@@ -124,7 +124,10 @@ The following expressions are _prvalue expressions_:
 * ```p->m```, the built-in _member of pointer_ expression, where ```m``` is a member enumerator or
   a non-static member function;
 
-*  
+* ```a.*mp```, the _pointer to member of object_ expression, where ```mp``` is a pointer to member
+  function, or where ```a``` is an rvalue and ```mp``` is a pointer to data member (_until C++11_);
+
+* ```p->*mp```, the built-in _pointer to member pointer_ expression   
  
 
 Temporary materialization
