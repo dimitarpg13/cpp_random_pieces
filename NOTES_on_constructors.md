@@ -295,6 +295,7 @@ by a ```static_cast``` expression
 **static_cast<** _T_ **>(** _other_ **)**
 
 
+initialization
 
 
 
