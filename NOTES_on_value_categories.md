@@ -77,6 +77,54 @@ array lvalue (_since C++11_);
 
 * (_since C++11_) a cast expression to rvalue reference to function type, such as 
   ```static_cast<void (&&)(int)>(x)```. 
+
+
+Properties:
+
+* same as _glvalue_ (see below):
+   * A _glvalue_ may be implicitly converted to a _prvalue_ with lvalue-to-rvalue, array-to-pointer, or 
+     function-to-pointer implicit conversion
+   * A _glvalue_ may be _polymorphic_: the _dynamic type_ of the object it identifies is not necessarily
+     the static type of the expression
+   * A _glvalue_ can have incomplete type, where permitted by the expression
+
+* address of an lvalue may be taken by built-in address of operator: ```&++i``` and ```&std::endl```
+  are valid expressions
+
+* a modifiable lvalue may be used as the left-handed operand of the built-in assignment and compound
+  assignment operators
+
+* an lvalue may be used to initialize an lvalue reference; this associates a new name with the object 
+  identified by the expression
+
+
+**prvalue**
+
+The following expressions are _prvalue expressions_:
+
+* a literal (except for string literal), such as ```42```, ```true```, or ```nullptr```;
+
+* a function call or an overloaded operator expression, whose return type is non-reference,
+  such as ```str.substr(1, 2)```, ```str1 + str2```, or ```it++```;
+
+* ```a++``` and ```a--```, the built-in _post-increment_ and _post-decrement_ expressions;
+
+* ```a + b```, ```a % b```, ```a & b```, ```a << b```, and all other built-in arithmetic expressions;
+
+* ```a && b```, ```a || b```, ```!a```, the built-in _logical_ expressions;
+
+* ```a < b```, ```a == b```, ```a >= b```, and all other built-in _comparison_ expressions;
+
+* ```&a```, the built-in _address-of_ expression;
+
+* ```a.m```, the _member of object_ expression, where ```m``` is a member enumerator or a non-static
+  member function, or where ```a``` is an rvalue and ```m``` is a non-static data member of non-
+  reference type (_until C++11_);
+
+* ```p->m```, the built-in _member of pointer_ expression, where ```m``` is a member enumerator or
+  a non-static member function;
+
+*  
  
 
 Temporary materialization
