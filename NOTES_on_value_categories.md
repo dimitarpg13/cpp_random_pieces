@@ -17,7 +17,51 @@ object, bit-field or a fucntion;
      it is discarded. The result object may be a variable, an object created by _new-expression_, 
      a temporary created by temporary materialization or a member thereof;
 
+* _xvalue_ (an "eXpriing" value) is a glvalue that denotes an object or bit-field whose resources
+  can be reused;
 
+* an _lvalue_ (so-called, historically, because lvalues could appear on the left-hand side of an 
+  assignment expression) is a glvalue that is not an xvalue;
+
+* an _rvalue_ (so-called, historically, because rvalues could appear on the right-hand side of an 
+  assignment expression) is a prvalue or an xvalue.
+
+
+Primary categories
+
+**lvalue**
+
+The following expressions are _lvalue expressions_:
+
+* the name of a variable, a function, a template parameter object (_since C++20_), or a data
+  member, regardless of type, such as ```std::cin``` or ```std::endl```. Even if the variable's
+  type is rvalue reference, the expression consisting of its name is an lvalue expression;
+
+* a function call or an overloaded operator expression, whose return type is lvalue reference,
+  such as ```std::getline(std::cin, str)```, ```std::cout << 1```, ```str1 = str2```, or ```++it```;
+
+* ```a = b```, ```a += b```, ```a %= b```, and all other built-in _assignment_ and _compound assignment_
+  expressions;
+
+* ```++a``` and ```--a```, the built-in _pre-increment_ and _pre-decrement_ expressions;
+
+* ```*p```, the built-in _indirection_ expression;
+
+* ```a[n]``` and ```p[n]```, the built-in _subscript_ expressions, where one operand in ```a[n]``` is an
+array lvalue (_since C++11_);
+
+* ```a.m```, the _member of object_ expression, except where ```m``` is a member enumerator or
+  non-static member function, or where ```a``` is an rvalue and ```m``` is a non-static data member
+  of object type
+
+* ```p->m```, the built-in _member of pointer_ expression, except where ```m``` is a member enumerator or
+  a non-statuc member function;
+
+* ```a.*mp```, the _pointer to member of object_ expression, where ```a``` is an lvalue and ```mp``` is a 
+  pointer to data member;
+
+* ```p->*mp```, the built-in pointer to member of pointer expression, where ```mp``` is a pointer to data
+  member; 
 
 Temporary materialization
 
@@ -47,8 +91,16 @@ of the same type (by _direct-initialization_ or _copy-initialization_): such obj
 directly from the initializer. This ensures "guaranteed copy elision".
 
 
+Array to pointer conversion
+
+An _lvalue_ or _rvalue_ of type "array of _N_ ```T```" or "array of unknown bound of ```T```" can be
+implicitly converted to a prvalue of type "pointer to ```T```". If the array is a _prvalue_, _temporary
+materialization_ occurs (_since C++17_). The resulting pointer refers to the first element of the array.  
+
+
 Function to pointer
 
 
 An _lvalue_ of function type T can be implicitly converted to a prvalue pointer to that function.
- 
+This does not apply to non-static member functions because lvalues that refer to non-static
+member functions do not exist.  
