@@ -128,6 +128,17 @@ The following expressions are _prvalue expressions_:
   function, or where ```a``` is an rvalue and ```mp``` is a pointer to data member (_until C++11_);
 
 * ```p->*mp```, the built-in _pointer to member pointer_ expression   
+
+* ```a, b```, the built-in _comma_ expression, where ```b``` is an rvalue;
+
+* ```a ? b : c```, the _ternary conditional_ expression for certain ```b``` and ```c```;
+
+* a cast expression to non-reference type such as ```static_cast<double>(x)```, ```std::string```,
+  or ```(int)42```;
+
+* the ```this``` pointer;
+
+* an _enumerator_;
  
 
 Temporary materialization
