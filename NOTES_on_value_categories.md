@@ -13,11 +13,11 @@ object, bit-field or a fucntion;
    * computes the value of the operand of an operator or is a void expression (such prvalue has no 
      _result object_), or
    * initializes an object or a bit-field (such _prvalue_ is said to have a _result object_). With
-     the exception of ```decltype```, all class and array _prvalue_s have a result object even if
+     the exception of ```decltype```, all class and array prvalues have a result object even if
      it is discarded. The result object may be a variable, an object created by _new-expression_, 
      a temporary created by temporary materialization or a member thereof;
 
-* _xvalue_ (an "eXpriing" value) is a glvalue that denotes an object or bit-field whose resources
+* _xvalue_ (an "eXpiring" value) is a glvalue that denotes an object or bit-field whose resources
   can be reused;
 
 * an _lvalue_ (so-called, historically, because lvalues could appear on the left-hand side of an 
